@@ -656,22 +656,58 @@ The build process generates:
 
 ## Testing
 
+### Setup
+
+First, build the app:
+```bash
+npm run build
+```
+
+This generates the compiled server at `dist/main.js` and bundled UI at `dist/src/index.html`.
+
 ### With Claude Desktop
 
-1. Build the app: `npm run build`
-2. Configure `claude_desktop_config.json`:
-   ```json
-   {
-     "mcpServers": {
-       "graph-viz": {
-         "command": "node",
-         "args": ["dist/main.js"],
-         "cwd": "/path/to/graph_visualization_mcp_app"
-       }
-     }
-   }
-   ```
-3. Start Claude Desktop and use the `create_visualization` tool
+Edit `~/Library/Application Support/Claude/claude_desktop_config.json` (macOS) or the equivalent on your OS:
+
+```json
+{
+  "mcpServers": {
+    "graph_visualization": {
+      "command": "node",
+      "args": ["/path/to/graph_visualization_mcp_app/dist/main.js"],
+      "cwd": "/path/to/graph_visualization_mcp_app"
+    }
+  }
+}
+```
+
+Replace `/path/to/graph_visualization_mcp_app` with the actual path to your repository.
+
+Then restart Claude Desktop and use the `create_visualization` tool.
+
+### With Claude Code (VS Code)
+
+Edit the settings in Claude Code VS Code extension configuration:
+
+```json
+{
+  "mcpServers": {
+    "graph_visualization": {
+      "command": "/opt/homebrew/bin/node",
+      "args": ["/path/to/graph_visualization_mcp_app/dist/main.js"],
+      "cwd": "/path/to/graph_visualization_mcp_app"
+    }
+  }
+}
+```
+
+**Note:** Use the full path to the `node` binary on your system:
+- macOS (Homebrew): `/opt/homebrew/bin/node`
+- macOS (NVM): `~/.nvm/versions/node/v<version>/bin/node`
+- Linux: `/usr/bin/node` or wherever Node is installed
+- Windows: `C:\Program Files\nodejs\node.exe`
+
+Then restart VS Code and the tool will be available in Claude Code.
 
 ### With HTTP Transport
 
@@ -679,16 +715,13 @@ For testing during development, modify `server.ts` to use HTTP instead of stdio:
 
 ```typescript
 const server = createServer();
-Bun.serve({
-  port: 3000,
-  routes: {
-    "/mcp": {
-      POST: async (req) => {
-        // Handle JSON-RPC requests
-      }
-    }
+// Export HTTP handler for testing
+export default {
+  fetch: async (req: Request) => {
+    // Handle JSON-RPC requests here
+    return new Response(JSON.stringify({ error: "Not implemented" }));
   }
-});
+};
 ```
 
 ## Performance Notes
