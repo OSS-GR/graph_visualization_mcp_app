@@ -21,7 +21,6 @@ interface ChartRendererProps {
 
 export function ChartRenderer({ config, theme, reducedMotion }: ChartRendererProps) {
   const [renderError, setRenderError] = useState<string | null>(null);
-  const [showDataTable, setShowDataTable] = useState(false);
   const chartRef = useRef<HTMLDivElement>(null);
 
   const parsedConfig = useMemo(() => {
@@ -98,24 +97,6 @@ export function ChartRenderer({ config, theme, reducedMotion }: ChartRendererPro
 
   const chartAriaLabel = `${parsedConfig.title || "Chart"} - ${chartType} chart with ${parsedConfig.series.length} series and ${parsedConfig.data.length} data points`;
 
-  const controlsStyle = {
-    display: "flex",
-    gap: "8px",
-    marginTop: "16px",
-    flexWrap: "wrap" as const,
-  };
-
-  const buttonStyle = {
-    padding: "8px 16px",
-    border: "1px solid var(--color-border-default)",
-    borderRadius: "4px",
-    backgroundColor: "var(--color-background-secondary)",
-    color: "var(--color-text-primary)",
-    cursor: "pointer",
-    fontSize: "14px",
-    fontFamily: "inherit",
-  };
-
   return (
     <div style={containerStyle}>
       <div>
@@ -175,120 +156,6 @@ export function ChartRenderer({ config, theme, reducedMotion }: ChartRendererPro
       <div id="chart-description" style={{ position: "absolute", left: "-10000px" }}>
         {dataDescription}
       </div>
-
-      {/* Accessibility controls */}
-      <div style={controlsStyle}>
-        <button
-          style={buttonStyle}
-          onClick={() => setShowDataTable(!showDataTable)}
-          aria-pressed={showDataTable}
-          title="Show data table for screen reader compatibility"
-        >
-          {showDataTable ? "Hide" : "Show"} Data Table
-        </button>
-        <button
-          style={buttonStyle}
-          onClick={() => chartRef.current?.focus()}
-          title="Focus the chart element"
-        >
-          Focus Chart
-        </button>
-      </div>
-
-      {/* Data table for accessibility */}
-      {showDataTable && (
-        <div
-          style={{
-            overflowX: "auto",
-            marginTop: "16px",
-            border: "1px solid var(--color-border-default)",
-            borderRadius: "4px",
-          }}
-          role="region"
-          aria-label="Chart data table"
-        >
-          <table
-            style={{
-              width: "100%",
-              borderCollapse: "collapse",
-              fontSize: "14px",
-            }}
-          >
-            <thead>
-              <tr
-                style={{
-                  borderBottom: "2px solid var(--color-border-default)",
-                  backgroundColor: "var(--color-background-secondary)",
-                }}
-              >
-                <th
-                  style={{
-                    padding: "8px",
-                    textAlign: "left",
-                    fontWeight: 600,
-                    color: "var(--color-text-primary)",
-                  }}
-                >
-                  {parsedConfig.xAxis}
-                </th>
-                {parsedConfig.series.map((series) => (
-                  <th
-                    key={series}
-                    style={{
-                      padding: "8px",
-                      textAlign: "right",
-                      fontWeight: 600,
-                      color: "var(--color-text-primary)",
-                    }}
-                  >
-                    {series}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {parsedConfig.data.slice(0, 10).map((row, idx) => (
-                <tr
-                  key={idx}
-                  style={{
-                    borderBottom: "1px solid var(--color-border-default)",
-                  }}
-                >
-                  <td
-                    style={{
-                      padding: "8px",
-                      color: "var(--color-text-primary)",
-                    }}
-                  >
-                    {String(row[parsedConfig.xAxis] || "")}
-                  </td>
-                  {parsedConfig.series.map((series) => (
-                    <td
-                      key={series}
-                      style={{
-                        padding: "8px",
-                        textAlign: "right",
-                        color: "var(--color-text-primary)",
-                      }}
-                    >
-                      {String(row[series] || "-")}
-                    </td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          {parsedConfig.data.length > 10 && (
-            <p
-              style={{
-                padding: "8px",
-              }}
-            >
-              Showing 10 of {parsedConfig.data.length} rows
-            </p>
-          )}
-        </div>
-      )}
     </div>
   );
 }
