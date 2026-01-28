@@ -23,13 +23,13 @@ An interactive data visualization MCP App built with React and Recharts. Create 
 ## Installation
 
 ```bash
-bun install
+npm install
 ```
 
 ## Building
 
 ```bash
-bun run build
+npm run build
 ```
 
 This builds the React UI into a single HTML file that can be embedded in MCP hosts.
@@ -37,13 +37,13 @@ This builds the React UI into a single HTML file that can be embedded in MCP hos
 ## Running the Server
 
 ```bash
-bun run serve
+npm run serve
 ```
 
 Or in development mode:
 
 ```bash
-bun run dev
+npm run dev
 ```
 
 The server listens on stdio and communicates with MCP hosts (like Claude Desktop).
@@ -596,32 +596,32 @@ Both use carefully selected color palettes optimized for readability and accessi
 - **TypeScript**: Strict type safety for configuration and components
 - **Zod**: Schema validation for tool inputs
 - **Vite**: Fast build tool with HMR support
-- **Bun**: JavaScript runtime and package manager with native TypeScript support
+- **Node.js**: JavaScript runtime environment
 
 ### Prerequisites
 
-- Bun runtime (installation: `curl -fsSL https://bun.sh/install | bash`)
+- Node.js 16+ (installation: https://nodejs.org/)
 
 ### Local Development
 
 Install dependencies:
 ```bash
-bun install
+npm install
 ```
 
 Start development server with hot reload:
 ```bash
-bun run dev
+npm run dev
 ```
 
 Build for production:
 ```bash
-bun run build
+npm run build
 ```
 
 Run the MCP server (production):
 ```bash
-bun run serve
+npm run serve
 ```
 
 ### Build Output
@@ -658,14 +658,14 @@ The build process generates:
 
 ### With Claude Desktop
 
-1. Build the app: `bun run build`
+1. Build the app: `npm run build`
 2. Configure `claude_desktop_config.json`:
    ```json
    {
      "mcpServers": {
        "graph-viz": {
-         "command": "bun",
-         "args": ["run", "serve"],
+         "command": "node",
+         "args": ["dist/main.js"],
          "cwd": "/path/to/graph_visualization_mcp_app"
        }
      }
