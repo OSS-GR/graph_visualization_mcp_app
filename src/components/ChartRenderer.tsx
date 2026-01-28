@@ -73,6 +73,7 @@ export function ChartRenderer({ config, theme, reducedMotion }: ChartRendererPro
     display: "flex",
     flexDirection: "column" as const,
     gap: "16px",
+    minHeight: 0,
   };
 
   const titleStyle = {
@@ -87,10 +88,12 @@ export function ChartRenderer({ config, theme, reducedMotion }: ChartRendererPro
     flex: 1,
     display: "flex",
     justifyContent: "center",
+    alignItems: "center",
     minHeight: "300px",
     width: "100%" as const,
     gap: "16px",
     flexWrap: "wrap" as const,
+    overflow: "auto" as const,
   };
 
   const chartAriaLabel = `${parsedConfig.title || "Chart"} - ${chartType} chart with ${parsedConfig.series.length} series and ${parsedConfig.data.length} data points`;
